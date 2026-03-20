@@ -161,3 +161,59 @@ TEST_CASE("CLI info shows session detail", "[cli]") {
     REQUIRE(out.find("Built IDM pipeline") != std::string::npos);
     fs::remove(tmp);
 }
+
+TEST_CASE("AC15: no XML markup in display output", "[cli][ac15]") {
+    std::vector<Session> sessions;
+    Session s;
+    s.session_id = "ffff6666-0000-0000-0000-000000000006";
+    s.project_path = "/home/user/test";
+    s.first_prompt = ""; // sanitized from "No prompt"
+    s.status = SessionStatus::active;
+    s.modified_at = std::chrono::system_clock::now();
+    s.created_at = s.modified_at;
+    sessions.push_back(s);
+
+    SessionStore store(sessions);
+    auto tmp = fs::temp_directory_path() / "ac15_tags.json";
+    TagManager tags(tmp);
+
+    auto [rc, out] = run_cli(store, tags, {"list", "--format", "json"});
+    REQUIRE(rc == 0);
+    REQUIRE(out.find("<command") == std::string::npos);
+    fs::remove(tmp);
+}
+
+TEST_CASE("AC16: --version outputs version", "[cli][ac16]") {
+    SessionStore store({});
+    auto tmp = fs::temp_directory_path() / "ac16_tags.json";
+    TagManager tags(tmp);
+
+    auto [rc, out] = run_cli(store, tags, {"--version"});
+    REQUIRE(rc == 0);
+    REQUIRE(out.find("0.1.0") != std::string::npos);
+    fs::remove(tmp);
+}
+
+TEST_CASE("AC6: info shows subagent info when present", "[cli][ac6]") {
+    std::vector<Session> sessions;
+    Session s;
+    s.session_id = "aaaa1111-0000-0000-0000-000000000001";
+    s.project_path = "/tmp";
+    s.first_prompt = "test";
+    s.status = SessionStatus::active;
+    s.subagent_count = 3;
+    s.subagent_types = {"Explore", "general-purpose"};
+    s.modified_at = std::chrono::system_clock::now();
+    s.created_at = s.modified_at;
+    sessions.push_back(s);
+
+    SessionStore store(sessions);
+    auto tmp = fs::temp_directory_path() / "ac6_tags.json";
+    TagManager tags(tmp);
+
+    auto [rc, out] = run_cli(store, tags, {"info", "aaaa"});
+    REQUIRE(rc == 0);
+    // Should show subagent info
+    REQUIRE(out.find("3") != std::string::npos); // subagent count
+    fs::remove(tmp);
+}
