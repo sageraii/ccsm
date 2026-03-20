@@ -1,4 +1,5 @@
 #include "cli/cli_app.hpp"
+#include "tui/tui_app.hpp"
 #include "core/session_scanner.hpp"
 #include "core/tag_manager.hpp"
 #include "core/session_store.hpp"
@@ -7,12 +8,6 @@
 
 int main(int argc, char* argv[]) {
     namespace fs = std::filesystem;
-
-    // If no arguments, show TUI placeholder
-    if (argc == 1) {
-        std::cout << "TUI mode: use `ccsm list` for now\n";
-        return 0;
-    }
 
     try {
         // Scan sessions
@@ -34,8 +29,16 @@ int main(int argc, char* argv[]) {
             tags.update_last_seen(s.session_id);
         }
 
-        // Build store and run CLI
+        // Build store
         ccsm::SessionStore store(std::move(sessions));
+
+        // If no arguments, launch TUI
+        if (argc == 1) {
+            ccsm::TUIApp tui(store, tags);
+            return tui.run();
+        }
+
+        // Otherwise run CLI
         ccsm::CLIApp cli(store, tags);
         return cli.run(argc, argv);
 
