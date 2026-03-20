@@ -10,10 +10,19 @@
 
 namespace ccsm {
 
+// Resume request: returned by TUI when user selects a session to resume
+struct ResumeRequest {
+    std::string session_id;
+    std::string project_path;
+};
+
 class TUIApp {
 public:
     TUIApp(SessionStore& store, TagManager& tags);
     int run();
+
+    // After run() returns, check if a resume was requested
+    std::optional<ResumeRequest> resume_request() const { return resume_request_; }
 
 private:
     SessionStore& store_;
@@ -31,6 +40,9 @@ private:
 
     // Info overlay
     bool show_info_ = false;
+
+    // Resume request (set by handle_resume, read by caller after run())
+    std::optional<ResumeRequest> resume_request_;
 
     void refresh_visible();
     ftxui::Element render_session(const Session& s, bool selected);

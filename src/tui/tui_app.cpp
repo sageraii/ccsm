@@ -445,10 +445,10 @@ void TUIApp::handle_resume() {
 
     const auto& s = visible_sessions_[static_cast<std::size_t>(selected_index_)];
     if (s.status == SessionStatus::expired) return;
-    if (!fs::exists(s.project_path)) return;
 
-    std::string cmd = "cd " + s.project_path + " && claude --resume " + s.session_id;
-    std::system(cmd.c_str());
+    // Store resume request — caller (main.cpp) will handle it after TUI exits cleanly
+    resume_request_ = ResumeRequest{s.session_id, s.project_path};
+    // TUI exit is handled by the caller (screen.Exit() in the event handler)
 }
 
 void TUIApp::handle_tag() {

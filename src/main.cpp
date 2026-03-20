@@ -35,7 +35,19 @@ int main(int argc, char* argv[]) {
         // If no arguments, launch TUI
         if (argc == 1) {
             ccsm::TUIApp tui(store, tags);
-            return tui.run();
+            int rc = tui.run();
+
+            // After TUI exits cleanly, check if resume was requested
+            auto req = tui.resume_request();
+            if (req.has_value()) {
+                std::cout << "\n";
+                if (!req->project_path.empty() && fs::is_directory(req->project_path)) {
+                    std::cout << "  cd " << req->project_path << "\n";
+                }
+                std::cout << "  claude --resume " << req->session_id << "\n\n";
+            }
+
+            return rc;
         }
 
         // Otherwise run CLI
