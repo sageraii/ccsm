@@ -10,6 +10,8 @@
 
 A CLI + TUI tool to browse, tag, and resume Claude Code sessions.
 
+**English** | **[한국어](README.md)**
+
 ---
 
 ## Problem

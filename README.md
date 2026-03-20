@@ -10,6 +10,8 @@
 
 Claude Code 세션을 조회하고, 태그를 붙이고, 재개하는 CLI + TUI 도구.
 
+**[English](README_EN.md)** | **한국어**
+
 ---
 
 ## 문제
