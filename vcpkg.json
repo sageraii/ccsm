@@ -1,0 +1,11 @@
+{
+  "name": "ccsm",
+  "version": "0.1.0",
+  "description": "Claude Code Session Manager",
+  "dependencies": [
+    "ftxui",
+    "cli11",
+    "nlohmann-json",
+    "catch2"
+  ]
+}
