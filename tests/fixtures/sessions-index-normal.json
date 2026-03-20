@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "originalPath": "/home/user/project",
+  "entries": [
+    {
+      "sessionId": "aaaa1111-0000-0000-0000-000000000001",
+      "fullPath": "/nonexistent.jsonl",
+      "fileMtime": 1769305557695,
+      "firstPrompt": "No prompt",
+      "summary": "Built IDM pipeline",
+      "messageCount": 42,
+      "created": "2026-01-24T02:25:22.896Z",
+      "modified": "2026-01-24T02:26:15.122Z",
+      "gitBranch": "main",
+      "projectPath": "/home/user/project",
+      "isSidechain": false
+    },
+    {
+      "sessionId": "bbbb2222-0000-0000-0000-000000000002",
+      "fullPath": "/nonexistent2.jsonl",
+      "fileMtime": 1769400000000,
+      "firstPrompt": "UCP checkout",
+      "messageCount": 8,
+      "created": "2026-01-25T01:00:00.000Z",
+      "modified": "2026-01-25T02:00:00.000Z",
+      "gitBranch": "",
+      "projectPath": "/home/user/project",
+      "isSidechain": false
+    }
+  ]
+}
