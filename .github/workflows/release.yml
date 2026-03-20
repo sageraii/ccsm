@@ -1,0 +1,89 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            arch: x86_64
+            artifact: ccsm-linux-x86_64
+          - os: ubuntu-22.04-arm
+            arch: aarch64
+            artifact: ccsm-linux-aarch64
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install vcpkg
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git /opt/vcpkg
+          /opt/vcpkg/bootstrap-vcpkg.sh
+
+      - name: Cache vcpkg packages
+        uses: actions/cache@v4
+        with:
+          path: /opt/vcpkg/installed
+          key: vcpkg-${{ matrix.os }}-${{ hashFiles('vcpkg.json') }}
+          restore-keys: vcpkg-${{ matrix.os }}-
+
+      - name: Configure
+        run: |
+          cmake -B build -S . \
+            -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_EXE_LINKER_FLAGS="-static-libgcc -static-libstdc++"
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Test
+        run: cd build && ctest -V --output-on-failure
+
+      - name: Package
+        run: |
+          mkdir -p dist
+          cp build/ccsm dist/${{ matrix.artifact }}
+          chmod +x dist/${{ matrix.artifact }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: dist/${{ matrix.artifact }}
+
+  create-release:
+    needs: build-release
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create checksums
+        run: |
+          cd artifacts
+          find . -type f -name "ccsm-*" -exec sha256sum {} \; > ../SHA256SUMS.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            artifacts/ccsm-linux-x86_64/ccsm-linux-x86_64
+            artifacts/ccsm-linux-aarch64/ccsm-linux-aarch64
+            SHA256SUMS.txt
