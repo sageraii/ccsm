@@ -7,6 +7,7 @@
 #include <fstream>
 #include <filesystem>
 #include <cstring>
+#include <unistd.h>
 
 static const char* SHELL_INIT_BASH = R"CCSM(
 # ccsm shell integration — add to ~/.bashrc:
@@ -100,14 +101,18 @@ int main(int argc, char* argv[]) {
                     // Shell wrapper mode: write hook script for parent shell to source
                     write_resume_hook(shell_hook_path, req->session_id, req->project_path);
                 } else {
-                    // Direct mode (no shell wrapper): print instructions
-                    std::cout << "\nResume this session:\n";
+                    // Direct mode: exec into bash with cd + readline pre-fill
+                    // This replaces the ccsm process — no shell integration needed
                     if (!req->project_path.empty() && fs::is_directory(req->project_path)) {
-                        std::cout << "  cd " << req->project_path << "\n";
+                        chdir(req->project_path.c_str());
                     }
-                    std::cout << "  claude --resume " << req->session_id << "\n\n";
-                    std::cout << "Tip: eval \"$(ccsm init bash)\" 을 ~/.bashrc에 추가하면\n"
-                              << "     자동으로 디렉토리 이동 + 명령어 자동완성이 됩니다.\n\n";
+                    std::string bash_cmd =
+                        "read -e -i 'claude --resume " + req->session_id +
+                        "' -p '$ ' _cmd && eval \"$_cmd\"";
+                    execlp("bash", "bash", "-c", bash_cmd.c_str(), nullptr);
+                    // execlp only returns on failure
+                    std::cerr << "bash 실행 실패\n";
+                    return 1;
                 }
             }
 
