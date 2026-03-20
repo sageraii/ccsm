@@ -1,6 +1,8 @@
 # Contributing to ccsm
 
-ccsm에 기여해주셔서 감사합니다! | Thank you for contributing to ccsm!
+ccsm에 기여해주셔서 감사합니다!
+
+**[English](CONTRIBUTING_EN.md)** | **한국어**
 
 ---
 
