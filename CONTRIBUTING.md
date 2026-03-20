@@ -143,6 +143,12 @@ TEST_CASE("descriptive name of behavior", "[module_tag]") {
 
 ---
 
+## AI Contributor
+
+AI 코딩 어시스턴트(Claude Code, Copilot, Codex 등)로 이 프로젝트에 기여하는 경우, [AGENTS.md](AGENTS.md)를 먼저 읽는다. 프로젝트 구조, 파일 맵, 데이터 형식, 알려진 주의사항, CLI 명령어/필터 추가 방법이 정리되어 있다. AI 도구가 이 파일을 참조하면 정확한 코드를 생성할 수 있다.
+
+---
+
 ## License
 
 기여하신 코드는 [MIT License](LICENSE)로 배포됩니다.

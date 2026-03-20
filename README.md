@@ -185,3 +185,9 @@ MIT
 1. 이슈 또는 PR을 [GitHub](https://github.com/sageraii/ccsm)에 제출한다.
 2. 새 기능은 `Catch2` 테스트를 함께 작성한다.
 3. 코드는 C++17 표준을 따르며 `clang-format`으로 포맷한다.
+
+자세한 가이드는 [CONTRIBUTING.md](CONTRIBUTING.md)를 참고한다.
+
+### AI Contributor
+
+AI 코딩 어시스턴트(Claude Code, Copilot, Codex 등)로 작업하는 경우, 프로젝트 구조, 데이터 형식, 주의사항, 확장 방법이 정리된 [AGENTS.md](AGENTS.md)를 먼저 읽은 후 작업한다.

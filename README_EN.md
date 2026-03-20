@@ -185,3 +185,9 @@ MIT
 1. Open an issue or pull request on [GitHub](https://github.com/sageraii/ccsm).
 2. New features should include `Catch2` tests.
 3. Code follows C++17 and is formatted with `clang-format`.
+
+See [CONTRIBUTING_EN.md](CONTRIBUTING_EN.md) for the full guide.
+
+### AI Contributors
+
+If you're working with an AI coding assistant (Claude Code, Copilot, Codex, etc.), read [AGENTS.md](AGENTS.md) first. It covers project architecture, data formats, known pitfalls, and how to extend the codebase.

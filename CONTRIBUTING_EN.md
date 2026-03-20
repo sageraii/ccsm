@@ -143,6 +143,12 @@ TEST_CASE("descriptive name of behavior", "[module_tag]") {
 
 ---
 
+## AI Contributors
+
+If you're using an AI coding assistant (Claude Code, Copilot, Codex, etc.) to contribute, read [AGENTS.md](AGENTS.md) first. It contains the project architecture, file map, data formats, known pitfalls, and step-by-step guides for adding commands and filters. AI tools that reference this file will produce more accurate code.
+
+---
+
 ## License
 
 All contributions are released under the [MIT License](LICENSE).
