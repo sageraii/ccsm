@@ -1,0 +1,2 @@
+{"type":"file-history-snapshot","messageId":"m1","snapshot":{"messageId":"m1","trackedFileBackups":{},"timestamp":"2026-01-24T00:00:00Z"},"isSnapshotUpdate":false}
+{"type":"file-history-snapshot","messageId":"m2","snapshot":{"messageId":"m2","trackedFileBackups":{},"timestamp":"2026-01-24T00:00:01Z"},"isSnapshotUpdate":true}
