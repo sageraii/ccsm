@@ -1,5 +1,13 @@
 # ccsm — Claude Code Session Manager
 
+[![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://en.cppreference.com/w/cpp/17)
+[![CMake](https://img.shields.io/badge/CMake-3.20%2B-064F8C.svg?logo=cmake)](https://cmake.org)
+[![vcpkg](https://img.shields.io/badge/vcpkg-manifest-8A2BE2.svg)](https://vcpkg.io)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Linux-lightgrey.svg)]()
+[![Tests](https://img.shields.io/badge/Tests-176%20assertions-brightgreen.svg)]()
+[![GitHub stars](https://img.shields.io/github/stars/sageraii/ccsm?style=social)](https://github.com/sageraii/ccsm)
+
 Claude Code 세션을 조회하고, 태그를 붙이고, 재개하는 CLI + TUI 도구.
 
 ---
