@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "sessions": {
+    "aaaa1111-0000-0000-0000-000000000001": {
+      "tags": ["training", "idm"],
+      "note": "IDM pipeline",
+      "favorite": true,
+      "lastSeen": "2026-03-18T10:00:00Z"
+    }
+  }
+}
