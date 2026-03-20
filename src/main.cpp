@@ -102,22 +102,28 @@ int main(int argc, char* argv[]) {
                     write_resume_hook(shell_hook_path, req->session_id, req->project_path);
                 } else {
                     // Direct mode: exec into interactive bash with user's profile
-                    // + readline pre-fill via DSR escape sequence trick
+                    // + readline pre-fill via DSR trick (delayed to PROMPT_COMMAND)
                     if (!req->project_path.empty() && fs::is_directory(req->project_path)) {
                         chdir(req->project_path.c_str());
                     }
 
-                    // Write temp init file: source user's bashrc + pre-fill command
-                    auto init_path = fs::temp_directory_path() / "ccsm-init.sh";
-                    {
-                        std::ofstream f(init_path);
-                        f << "[ -f ~/.bashrc ] && source ~/.bashrc\n"
-                          << "bind '\"\\e[0n\":\"claude --resume " << req->session_id << "\"'\n"
-                          << "printf '\\e[5n'\n"
-                          << "rm -f " << init_path.string() << "\n";
+                    // Use pipe + /proc/self/fd/N as rcfile (no temp file)
+                    int pipefd[2];
+                    if (pipe(pipefd) != 0) {
+                        std::cerr << "pipe 생성 실패\n";
+                        return 1;
                     }
 
-                    execlp("bash", "bash", "--init-file", init_path.c_str(), nullptr);
+                    std::string init_script =
+                        "[ -f ~/.bashrc ] && source ~/.bashrc\n"
+                        "bind '\"\\e[0n\":\"claude --resume " + req->session_id + "\"'\n"
+                        "PROMPT_COMMAND='printf \"\\e[5n\"; unset PROMPT_COMMAND'\n";
+
+                    write(pipefd[1], init_script.c_str(), init_script.size());
+                    close(pipefd[1]);
+
+                    std::string fd_path = "/proc/self/fd/" + std::to_string(pipefd[0]);
+                    execlp("bash", "bash", "--rcfile", fd_path.c_str(), nullptr);
                     std::cerr << "bash 실행 실패\n";
                     return 1;
                 }
